@@ -1,0 +1,62 @@
+kind: BGPConfiguration
+apiVersion: projectcalico.org/v3
+metadata:
+  name: default
+spec:
+
+---
+
+kind: Node
+apiVersion: projectcalico.org/v3
+metadata:
+  name: kube-master
+spec:
+  bgp:
+    ipv4Address: 10.192.0.2/16
+    ipv6Address: fdf5:10::2/112
+
+---
+
+kind: Node
+apiVersion: projectcalico.org/v3
+metadata:
+  name: kube-node-1
+spec:
+  bgp:
+    ipv4Address: 10.192.0.3/16
+    ipv6Address: fdf5:10::3/112
+
+---
+
+kind: Node
+apiVersion: projectcalico.org/v3
+metadata:
+  name: kube-node-2
+spec:
+  bgp:
+    ipv4Address: 10.192.0.4/16
+    ipv6Address: fdf5:10::4/112
+
+---
+
+kind: IPPool
+apiVersion: projectcalico.org/v3
+metadata:
+  name: ippool-1
+spec:
+  cidr: 192.168.0.0/16
+  ipipMode: Never
+  vxlanMode: Always
+  natOutgoing: true
+
+---
+
+kind: IPPool
+apiVersion: projectcalico.org/v3
+metadata:
+  name: ippool-v6-1
+spec:
+  cidr: dead:beef::/64
+  ipipMode: Never
+  vxlanMode: Always
+  natOutgoing: true

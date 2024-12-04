@@ -1,0 +1,66 @@
+# gitignore cheatsheet:
+#
+# Matches with no '/'s automatically match files in sub-dirs.
+# Matches starting with a '/' only match in the top-level directory.
+# Matches ending with a '/' only match directories.
+# ** can be used to match multiple levels of directory.
+
+# Global glob patterns.
+*.log
+*.coverprofile
+*.test
+.project
+/.noseids
+/nosetests.xml
+
+# Build directories.
+/bin/
+/docker-image/bin/
+/build/
+/dist/
+.go-pkg-cache/
+/artifacts/
+/bpf-gpl/include/libbpf/src/amd64/
+/bpf-gpl/include/libbpf/src/arm64/
+bpf-gpl/include/libbpf/src/armv7/
+bpf-gpl/include/libbpf/src/ppc64le/
+
+# IDE files.
+/.idea/
+/.vscode/
+
+# Patterns to match files from older releases (prevents lots of
+# untracked files from showing up when switching from a maintenance branch.
+
+# Python builds/UT data.
+.hypothesis/
+.coverage
+*_pb2.py
+/env/
+*.egg-info/
+tmp/
+htmlcov/
+.tox/
+/.eggs/
+/coverage.xml
+/site-packages
+/python/
+/version.txt
+/.dir-locals.el
+/report/*.xml
+
+/k8sfv/prometheus/data
+/k8sfv/prometheus/prometheus.yml
+/k8sfv/output/
+
+.semaphore-cache/
+/rpm/felix.spec
+/debian/changelog
+/.built-bpf-clang-builder-*
+
+# for the bpf programs
+*.ll
+*.d
+
+# produced as part of openstack packaging build
+debian/files
