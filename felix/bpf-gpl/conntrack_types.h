@@ -160,7 +160,7 @@ CALI_MAP_NAMED(cali_v4_ct, cali_ct, 3,
 #endif
 		BPF_MAP_TYPE_HASH,
 		struct calico_ct_key, struct calico_ct_value,
-		512000, BPF_F_NO_PREALLOC)
+		6553600, BPF_F_NO_PREALLOC)
 
 enum calico_ct_result_type {
 	/* CALI_CT_NEW means that the packet is not part of a known conntrack flow.

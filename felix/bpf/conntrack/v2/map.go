@@ -33,7 +33,7 @@ import (
 //	};
 const KeySize = 16
 const ValueSize = 64
-const MaxEntries = 512000
+const MaxEntries = 6553600
 
 type Key [KeySize]byte
 

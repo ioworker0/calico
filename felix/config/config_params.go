@@ -195,15 +195,16 @@ type Config struct {
 	BPFMapSizeNATBackend               int               `config:"int;262144;non-zero"`
 	BPFMapSizeNATAffinity              int               `config:"int;65536;non-zero"`
 	BPFMapSizeRoute                    int               `config:"int;262144;non-zero"`
-	BPFMapSizeConntrack                int               `config:"int;512000;non-zero"`
-	BPFMapSizeIPSets                   int               `config:"int;1048576;non-zero"`
-	BPFMapSizeIfState                  int               `config:"int;1000;non-zero"`
-	BPFHostConntrackBypass             bool              `config:"bool;true"`
-	BPFEnforceRPF                      string            `config:"oneof(Disabled,Strict,Loose);Loose;non-zero"`
-	BPFPolicyDebugEnabled              bool              `config:"bool;true"`
-	BPFForceTrackPacketsFromIfaces     []string          `config:"iface-filter-slice;docker+"`
-	BPFDisableGROForIfaces             *regexp.Regexp    `config:"regexp;"`
-	BPFExcludeCIDRsFromNAT             []string          `config:"cidr-list;;"`
+	//BPFMapSizeConntrack                int               `config:"int;512000;non-zero"`
+	BPFMapSizeConntrack            int            `config:"int;6553600;non-zero"`
+	BPFMapSizeIPSets               int            `config:"int;1048576;non-zero"`
+	BPFMapSizeIfState              int            `config:"int;1000;non-zero"`
+	BPFHostConntrackBypass         bool           `config:"bool;true"`
+	BPFEnforceRPF                  string         `config:"oneof(Disabled,Strict,Loose);Loose;non-zero"`
+	BPFPolicyDebugEnabled          bool           `config:"bool;true"`
+	BPFForceTrackPacketsFromIfaces []string       `config:"iface-filter-slice;docker+"`
+	BPFDisableGROForIfaces         *regexp.Regexp `config:"regexp;"`
+	BPFExcludeCIDRsFromNAT         []string       `config:"cidr-list;;"`
 
 	// DebugBPFCgroupV2 controls the cgroup v2 path that we apply the connect-time load balancer to.  Most distros
 	// are configured for cgroup v1, which prevents all but the root cgroup v2 from working so this is only useful
