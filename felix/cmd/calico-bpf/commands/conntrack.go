@@ -36,6 +36,7 @@ import (
 
 func init() {
 	conntrackCmd.AddCommand(newConntrackDumpCmd())
+	conntrackCmd.AddCommand(newConntrackDumpTCCmd())
 	conntrackCmd.AddCommand(newConntrackRemoveCmd())
 	conntrackCmd.AddCommand(&cobra.Command{
 		Use:   "clean",
