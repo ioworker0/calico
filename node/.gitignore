@@ -21,6 +21,7 @@ kubectl
 /tests/k8st/kind
 filesystem/included-source
 config/
+!filesystem/etc/calico/confd/config
 kubeconfig.yaml
 ./tests/k8st/infra/calico.yaml.tmp
 apiserver.crt

@@ -1,0 +1,33 @@
+# 定义动态参数（构建时传入）
+ARG NEW_IMAGE
+ARG BASE_IMAGE
+ARG VERSION
+
+# 第一阶段：从 NEW_IMAGE 提取文件
+FROM ${NEW_IMAGE} AS new
+
+# 第二阶段：使用 BASE_IMAGE 作为最终镜像
+FROM ${BASE_IMAGE} AS base
+
+ARG VERSION
+
+# 复制第一阶段中的 /bin/calico-node 到当前镜像
+COPY --from=new /bin/calico-node /bin/calico-node
+
+# 复制整个文件夹 /usr/lib/calico/bpf/
+COPY --from=new /usr/lib/calico/bpf/ /usr/lib/calico/bpf/
+
+# 设置启动时运行的命令
+CMD ["start_runit"]
+
+# 添加镜像的元数据标签，动态注入 version
+LABEL name="Calico node" \
+      vendor="Project Calico" \
+      version=$VERSION \
+      release="1" \
+      summary="Calico node handles networking and policy for Calico" \
+      description="Calico node handles networking and policy for Calico" \
+      maintainer="maintainers@tigera.io"
+
+# 设置环境变量
+ENV SVDIR=/etc/service/enabled

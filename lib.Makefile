@@ -225,7 +225,10 @@ ifeq ($(GIT_USE_SSH),true)
 endif
 
 # Get version from git.
-GIT_VERSION:=$(shell git describe --tags --dirty --always --abbrev=12)
+# GIT_VERSION:=$(shell git describe --tags --dirty --always --abbrev=12)
+ifndef GIT_VERSION
+$(error GIT_VERSION is not set. Please set it as an environment variable.)
+endif
 
 # Figure out version information.  To support builds from release tarballs, we default to
 # <unknown> if this isn't a git checkout.

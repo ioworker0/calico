@@ -186,11 +186,12 @@ build: $(NODE_CONTAINER_MARKER) $(TOOLS_MOUNTNS_BINARY)
 
 # Pull in config from confd.
 filesystem/etc/calico/confd/conf.d: $(shell find ../confd/etc/calico/confd/conf.d -type f)
-	rm -rf $@ && cp -r ../confd/etc/calico/confd/conf.d $@
+	rm -rf $@ && mkdir -p $@ && cp -r ../confd/etc/calico/confd/conf.d/* $@
 	chmod +w $@
+	ls $@
 
 filesystem/etc/calico/confd/templates: $(shell find ../confd/etc/calico/confd/templates -type f)
-	rm -rf $@ && cp -r ../confd/etc/calico/confd/templates $@
+	rm -rf $@ && mkdir -p $@ && cp -r ../confd/etc/calico/confd/templates/* $@
 	chmod +w $@
 
 $(LIBBPF_A): $(shell find ../felix/bpf-gpl/include/libbpf -type f -name '*.[ch]')
