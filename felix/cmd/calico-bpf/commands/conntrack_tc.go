@@ -63,31 +63,15 @@ func (cmd *conntrackDumpTCCmd) Args(c *cobra.Command, args []string) error {
 }
 
 func (cmd *conntrackDumpTCCmd) Run(c *cobra.Command, _ []string) {
-	conntrack.SetMapSize(cmd.MaxEntries)
-	if cmd.Debug {
-		fmt.Printf("[debug] MaxEntries: %d\n", cmd.MaxEntries)
+	var ctMap maps.Map
+
+	// Set the map size based on the actual max entries obtained from the map info.
+	if err := cmd.setCTMapSize(); err != nil {
+		log.WithError(err).Fatal("Failed to set ConntrackMap size")
 	}
 
-	var ctMap maps.Map
-	switch cmd.version {
-	case "2":
-		ctMap = conntrack.MapV2()
-		if cmd.Debug {
-			fmt.Printf("[debug] ctMap = conntrack.MapV2() \n")
-		}
-	default:
-		if ipv6 != nil && *ipv6 {
-			if cmd.Debug {
-				fmt.Printf("[debug] ctMap = conntrack.MapV6() \n")
-			}
-			ctMap = conntrack.MapV6()
-		} else {
-			if cmd.Debug {
-				fmt.Printf("[debug] ctMap = conntrack.Map() \n")
-			}
-			ctMap = conntrack.Map()
-		}
-	}
+	ctMap = cmd.getCTMap()
+
 	if err := ctMap.Open(); err != nil {
 		if cmd.Debug {
 			fmt.Printf("[debug] Failed to access ConntrackMap: err: %+v\n", err)
@@ -192,4 +176,53 @@ func (cmd *conntrackDumpTCCmd) Run(c *cobra.Command, _ []string) {
 		}
 		log.WithError(err).Fatal("Failed to iterate over conntrack entries")
 	}
+}
+
+func (cmd *conntrackDumpTCCmd) getCTMap() maps.Map {
+	var ctMap maps.Map
+	switch cmd.version {
+	case "2":
+		ctMap = conntrack.MapV2()
+		if cmd.Debug {
+			fmt.Printf("[debug] ctMap = conntrack.MapV2() \n")
+		}
+	default:
+		if ipv6 != nil && *ipv6 {
+			if cmd.Debug {
+				fmt.Printf("[debug] ctMap = conntrack.MapV6() \n")
+			}
+			ctMap = conntrack.MapV6()
+		} else {
+			if cmd.Debug {
+				fmt.Printf("[debug] ctMap = conntrack.Map() \n")
+			}
+			ctMap = conntrack.Map()
+		}
+	}
+	return ctMap
+}
+
+func (cmd *conntrackDumpTCCmd) setCTMapSize() error {
+	ctMap := cmd.getCTMap()
+
+	if err := ctMap.Open(); err != nil {
+		return errors.New("Failed to access ConntrackMap")
+	}
+
+	if mapInfo, err := maps.GetMapInfo(ctMap.MapFD()); err != nil {
+		return errors.New("Failed to get map info")
+	} else {
+		// Set the map size based on the actual max entries obtained from the map info.
+		maps.SetSize(ctMap.GetName(), mapInfo.MaxEntries)
+
+		if cmd.Debug {
+			fmt.Printf("[debug] map:%s, set size: %d\n", ctMap.GetName(), mapInfo.MaxEntries)
+		}
+	}
+
+	if cmd.Debug {
+		fmt.Printf("[debug] map:%s, get size: %d\n", ctMap.GetName(), maps.Size(ctMap.GetName()))
+	}
+
+	return nil
 }
