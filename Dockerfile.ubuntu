@@ -1,0 +1,16 @@
+FROM ubuntu:24.04
+
+# 设置环境变量
+ENV TERM=xterm
+
+# 更新包管理器并安装
+RUN apt-get update && \
+    apt-get install -y libelf1 && \
+    # 清理无用的缓存文件，减小镜像体积
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# 设置镜像的默认工作目录
+WORKDIR /root
+
+# 显示镜像构建完成后的基础信息
+CMD ["bash"]
